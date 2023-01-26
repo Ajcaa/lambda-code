@@ -1,7 +1,0 @@
-codigo para el body para postman: 
-
-{
-  "body": "{\"items\":[{\"title\": \"Mi producto\", \"quantity\": 1, \"unit_price\": 75.76 } ]}"
-}
-
-

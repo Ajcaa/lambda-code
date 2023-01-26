@@ -5,22 +5,27 @@ import mercadopago
 
 def lambda_handler(event, context):
     sdk = mercadopago.SDK(os.environ["TEST_TOKEN"])
-    bodyGet = json.loads(event["body"])
-    preference_data = {
-       "items": bodyGet["items"]
+    
+    payment_data = {
+        "transaction_amount": float(event["transaction_amount"]),
+        "token": event["token"],
+        "installments": int(event["installments"]),
+        "payment_method_id": event["payment_method_id"],
+        "payer": {
+            "email": event["payer"]["email"],
+            "identification": {
+                "type": event["payer"]["identification"]["type"], 
+                "number": event["payer"]["identification"]["number"]
+            }
+        }
     }
 
-    preference_response = sdk.preference().create(preference_data)
-    preference = preference_response["response"]
+    payment_response = sdk.payment().create(payment_data)
+    payment = payment_response["response"]
 
     return {
         "statusCode": 200,
-        "headers": {
-            'Access-Control-Allow-Headers': 'Content-type',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-        },
-        "body": json.dumps(
-            preference
-        ),
+        "body": 
+            payment
+        ,
     }
